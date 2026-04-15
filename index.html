@@ -1,153 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Fitrix Reminder</title>
+</head>
+<body>
+
+<h2>Fitrix Reminder System Running ✅</h2>
+<p>Keep this tab open for reminders.</p>
+
 <script>
-// ===============================
+// ================================
 // FITRIX PRO REMINDER SYSTEM
-// ===============================
+// ================================
 
 // SETTINGS
 const waterInterval = 2 * 60 * 60 * 1000; // 2 hours
 const workoutTime = "18:00"; // 6 PM
 const sleepTime = "22:30"; // 10:30 PM
 
-// ===============================
-// SOUND FUNCTION
-// ===============================
+// SOUND
 function playSound() {
-    const audio = new Audio("https://actions.google.com/sounds/v1/alarms/beep_short.ogg");
-    audio.play();
+  const audio = new Audio("https://actions.google.com/sounds/v1/alarms/beep_short.ogg");
+  audio.play();
 }
 
-// ===============================
-// REMINDER POPUP
-// ===============================
-function showReminder(message, type) {
-    const existing = document.getElementById("reminderBox");
-    if (existing) existing.remove();
-
-    const box = document.createElement("div");
-    box.id = "reminderBox";
-    box.style.position = "fixed";
-    box.style.bottom = "20px";
-    box.style.left = "10px";
-    box.style.right = "10px";
-    box.style.padding = "16px";
-    box.style.background = "#fff";
-    box.style.borderRadius = "12px";
-    box.style.boxShadow = "0 4px 20px rgba(0,0,0,0.1)";
-    box.style.zIndex = "9999";
-    box.style.textAlign = "center";
-    box.style.fontFamily = "-apple-system, BlinkMacSystemFont, sans-serif";
-
-    box.innerHTML = `
-        <p style="margin-bottom:10px;font-weight:600;">${message}</p>
-        <button onclick="handleDone('${type}')" style="padding:8px 16px;background:#ff7a00;color:#fff;border:none;border-radius:8px;">Done</button>
-    `;
-
-    document.body.appendChild(box);
-    playSound();
+// SHOW REMINDER
+function showReminder(message) {
+  alert(message);
+  playSound();
 }
 
-// ===============================
-// HANDLE DONE
-// ===============================
-function handleDone(type) {
-    if (type === "water") {
-        localStorage.setItem("lastWaterTime", Date.now());
-    }
-    document.getElementById("reminderBox").remove();
-}
-
-// ===============================
 // WATER REMINDER
-// ===============================
-function checkWaterReminder() {
-    const now = Date.now();
-    const last = localStorage.getItem("lastWaterTime") || now;
+setInterval(() => {
+  showReminder("💧 Time to drink water!");
+}, waterInterval);
 
-    if (now - last >= waterInterval) {
-        showReminder("💧 Fasil, drink water now!", "water");
-    }
-}
-
-// ===============================
-// TIME REMINDERS
-// ===============================
+// TIME CHECK
 function checkTimeReminder() {
-    const now = new Date();
-    const currentTime = now.toTimeString().slice(0,5);
+  const now = new Date();
+  const currentTime = now.toTimeString().slice(0,5);
 
-    if (currentTime === workoutTime) {
-        showReminder("🏋️ Gym time! Let’s go 💪", "workout");
-    }
+  if (currentTime === workoutTime) {
+    showReminder("🏋️ Time for workout!");
+  }
 
-    if (currentTime === sleepTime) {
-        showReminder("😴 Sleep time! Recovery = Growth", "sleep");
-    }
+  if (currentTime === sleepTime) {
+    showReminder("😴 Time to sleep!");
+  }
 }
 
-// ===============================
-// STREAK TRACKER
-// ===============================
-function updateStreak() {
-    const today = new Date().toDateString();
-    const last = localStorage.getItem("lastActiveDate");
-    let streak = parseInt(localStorage.getItem("streak")) || 0;
+setInterval(checkTimeReminder, 60000); // every 1 min
 
-    if (last !== today) {
-        streak += 1;
-        localStorage.setItem("streak", streak);
-        localStorage.setItem("lastActiveDate", today);
-    }
-
-    showStreak(streak);
-}
-
-function showStreak(streak) {
-    let streakBox = document.getElementById("streakBox");
-
-    if (!streakBox) {
-        streakBox = document.createElement("div");
-        streakBox.id = "streakBox";
-        streakBox.style.position = "fixed";
-        streakBox.style.top = "10px";
-        streakBox.style.right = "10px";
-        streakBox.style.background = "#ff7a00";
-        streakBox.style.color = "#fff";
-        streakBox.style.padding = "8px 12px";
-        streakBox.style.borderRadius = "20px";
-        streakBox.style.fontSize = "12px";
-        streakBox.style.zIndex = "9999";
-        document.body.appendChild(streakBox);
-    }
-
-    streakBox.innerText = "🔥 Streak: " + streak + " days";
-}
-
-// ===============================
-// SMART AI SUGGESTIONS
-// ===============================
-function showSuggestion() {
-    const lastWater = localStorage.getItem("lastWaterTime") || 0;
-    const now = Date.now();
-
-    if (now - lastWater > 3 * 60 * 60 * 1000) {
-        showReminder("⚠️ You are skipping water often. Stay consistent 💧", "water");
-    }
-
-    const hour = new Date().getHours();
-    if (hour >= 23) {
-        showReminder("⚠️ You're sleeping late. This affects muscle growth 😴", "sleep");
-    }
-}
-
-// ===============================
-// RUN SYSTEM
-// ===============================
-setInterval(checkWaterReminder, 60000); // every 1 min
-setInterval(checkTimeReminder, 60000);
-setInterval(showSuggestion, 2 * 60 * 60 * 1000);
-
-// INITIAL RUN
-checkWaterReminder();
-checkTimeReminder();
-updateStreak();
 </script>
+
+</body>
+</html>
