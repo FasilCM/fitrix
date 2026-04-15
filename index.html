@@ -1,23 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Fitrix Reminder</title>
-</head>
-<body>
-
-<h2>Fitrix Reminder System Running ✅</h2>
-<p>Keep this tab open for reminders.</p>
-
 <script>
-// ================================
-// FITRIX PRO REMINDER SYSTEM
-// ================================
 
-// SETTINGS
-const waterInterval = 2 * 60 * 60 * 1000; // 2 hours
-const workoutTime = "18:00"; // 6 PM
-const sleepTime = "22:30"; // 10:30 PM
+// TEST MODE (fast)
+const waterInterval = 5000; // 5 seconds
+const workoutTime = new Date().toTimeString().slice(0,5); // NOW
+const sleepTime = workoutTime;
 
 // SOUND
 function playSound() {
@@ -25,15 +11,15 @@ function playSound() {
   audio.play();
 }
 
-// SHOW REMINDER
+// REMINDER
 function showReminder(message) {
   alert(message);
   playSound();
 }
 
-// WATER REMINDER
+// WATER
 setInterval(() => {
-  showReminder("💧 Time to drink water!");
+  showReminder("💧 Drink Water!");
 }, waterInterval);
 
 // TIME CHECK
@@ -42,17 +28,14 @@ function checkTimeReminder() {
   const currentTime = now.toTimeString().slice(0,5);
 
   if (currentTime === workoutTime) {
-    showReminder("🏋️ Time for workout!");
+    showReminder("🏋️ Workout Time!");
   }
 
   if (currentTime === sleepTime) {
-    showReminder("😴 Time to sleep!");
+    showReminder("😴 Sleep Time!");
   }
 }
 
-setInterval(checkTimeReminder, 60000); // every 1 min
+setInterval(checkTimeReminder, 10000);
 
 </script>
-
-</body>
-</html>
