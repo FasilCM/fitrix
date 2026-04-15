@@ -1,162 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fitrix</title>
-
-<style>
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #0f172a;
-  color: white;
-  text-align: center;
-}
-
-.container {
-  padding: 20px;
-}
-
-h1 {
-  margin-top: 20px;
-  font-size: 28px;
-}
-
-.card {
-  background: #1e293b;
-  padding: 20px;
-  border-radius: 15px;
-  margin-top: 20px;
-}
-
-button {
-  padding: 12px 20px;
-  border: none;
-  border-radius: 10px;
-  margin: 10px;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-.water-btn {
-  background: #38bdf8;
-  color: black;
-}
-
-.reset-btn {
-  background: #ef4444;
-  color: white;
-}
-
-.progress {
-  font-size: 24px;
-  margin-top: 10px;
-}
-
-#reminder {
-  position: fixed;
-  bottom: 20px;
-  left: 20px;
-  right: 20px;
-  background: #22c55e;
-  color: black;
-  padding: 15px;
-  border-radius: 12px;
-  display: none;
-  font-weight: bold;
-}
-</style>
+  <meta charset="UTF-8">
+  <title>Fitrix</title>
 </head>
-
 <body>
 
-<div class="container">
-
-<h1>💪 Fitrix</h1>
-<p>Your Personal Fitness Reminder</p>
-
-<div class="card">
-  <h2>💧 Water Tracker</h2>
-  <div class="progress" id="waterCount">0 / 8 Glasses</div>
-
-  <button class="water-btn" onclick="addWater()">+ Drink Water</button>
-  <button class="reset-btn" onclick="resetWater()">Reset</button>
-</div>
-
-<div class="card">
-  <h2>🎯 Today's Goals</h2>
-  <p>🏋️ Workout: 6:00 PM</p>
-  <p>😴 Sleep: 10:30 PM</p>
-</div>
-
-</div>
-
-<div id="reminder"></div>
+<h2>Fitrix Reminder System Running ✅</h2>
+<p>Keep this tab open for reminders.</p>
 
 <script>
 
-// =================
-// WATER TRACKER
-// =================
-let water = localStorage.getItem("water") || 0;
-const goal = 8;
+// SETTINGS
+const waterInterval = 2 * 60 * 60 * 1000; // 2 hours
+const workoutTime = "18:00"; // 6 PM
+const sleepTime = "22:30"; // 10:30 PM
 
-function updateUI() {
-  document.getElementById("waterCount").innerText = water + " / " + goal + " Glasses";
-}
-updateUI();
-
-function addWater() {
-  water++;
-  localStorage.setItem("water", water);
-  updateUI();
-  showReminder("💧 Good job! Keep going!");
+// SOUND
+function playSound() {
+  const audio = new Audio("https://actions.google.com/sounds/v1/alarms/beep_short.ogg");
+  audio.play();
 }
 
-function resetWater() {
-  water = 0;
-  localStorage.setItem("water", water);
-  updateUI();
+// REMINDER
+function showReminder(message) {
+  alert(message);
+  playSound();
 }
 
-// =================
-// REMINDER UI
-// =================
-function showReminder(msg) {
-  const box = document.getElementById("reminder");
-  box.innerText = msg;
-  box.style.display = "block";
-
-  setTimeout(() => {
-    box.style.display = "none";
-  }, 3000);
-}
-
-// =================
-// AUTO REMINDERS
-// =================
-
-// Water every 2 hrs
+// WATER REMINDER
 setInterval(() => {
   showReminder("💧 Time to drink water!");
-}, 2 * 60 * 60 * 1000);
+}, waterInterval);
 
-// Workout & Sleep
-function checkTime() {
+// TIME CHECK
+function checkTimeReminder() {
   const now = new Date();
-  const time = now.toTimeString().slice(0,5);
+  const currentTime = now.toTimeString().slice(0,5);
 
-  if (time === "18:00") {
-    showReminder("🏋️ Workout Time!");
+  if (currentTime === workoutTime) {
+    showReminder("🏋️ Time for workout!");
   }
 
-  if (time === "22:30") {
-    showReminder("😴 Sleep Time!");
+  if (currentTime === sleepTime) {
+    showReminder("😴 Time to sleep!");
   }
 }
 
-setInterval(checkTime, 60000);
+setInterval(checkTimeReminder, 60000);
 
 </script>
 
